@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Charlie Coin (CC) - 官方网站</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        // 配置Tailwind自定义颜色和字体
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#6C5CE7',
+                        secondary: '#00D2D3',
+                        dark: '#191923',
+                        light: '#F8F9FA',
+                        accent: '#FD79A8'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                        display: ['Poppins', 'sans-serif']
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .text-shadow {
+                text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            }
+            .blur-bg {
+                backdrop-filter: blur(10px);
+                -webkit-backdrop-filter: blur(10px);
+            }
+            .q弹 {
+                transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            }
+            .q弹:hover {
+                transform: translateY(-5px) scale(1.02);
+            }
+            .gradient-text {
+                background-clip: text;
+                -webkit-background-clip: text;
+                color: transparent;
+            }
+            .lang-item {
+                transition: all 0.3s ease;
+                border-radius: 20px;
+            }
+            .lang-item.active {
+                background: rgba(108, 92, 231, 0.2);
+                box-shadow: 0 0 15px rgba(108, 92, 231, 0.3);
+            }
+            .lang-menu {
+                opacity: 0;
+                transform: translateY(10px);
+                visibility: hidden;
+                transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            }
+            .lang-toggle:hover .lang-menu,
+            .lang-toggle:focus-within .lang-menu {
+                opacity: 1;
+                visibility: visible;
+                transform: translateY(0);
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gradient-to-br from-dark to-gray-900 text-light min-h-screen overflow-x-hidden">
+    <!-- 背景装饰 -->
+    <div class="fixed inset-0 z-0 overflow-hidden">
+        <div class="absolute top-20 left-1/4 w-96 h-96 bg-primary/20 rounded-full filter blur-[100px] animate-pulse"></div>
+        <div class="absolute bottom-20 right-1/4 w-96 h-96 bg-secondary/20 rounded-full filter blur-[100px] animate-pulse" style="animation-delay: 1s"></div>
+        <div class="absolute top-1/2 left-1/2 w-64 h-64 bg-accent/20 rounded-full filter blur-[80px] animate-pulse" style="animation-delay: 2s"></div>
+    </div>
+
+    <!-- 导航栏 -->
+    <header class="fixed top-0 left-0 right-0 z-50 transition-all duration-300" id="navbar">
+        <div class="container mx-auto px-4 py-4 flex items-center justify-between blur-bg bg-dark/60 border-b border-white/10">
+            <a href="#home" class="flex items-center space-x-2 group">
+                <!-- CC图标 -->
+                <div class="w-10 h-10 rounded-full bg-gradient-to-r from-primary to-secondary flex items-center justify-center">
+                    <img src="https://youke1.picui.cn/s1/2025/08/14/689d991deab41.jpeg" alt="Charlie Coin 标志" class="w-8 h-8 rounded-full">
+                </div>
+                <span class="text-xl font-display font-bold tracking-tight group-hover:text-primary transition-colors">Charlie Coin</span>
+            </a>
+            
+            <!-- 桌面导航 -->
+            <nav class="hidden md:flex items-center space-x-3">
+                <a href="#home" class="nav-link relative py-2 font-medium hover:text-primary transition-colors" data-i18n="home">首页</a>
+                <a href="#about" class="nav-link relative py-2 font-medium hover:text-primary transition-colors" data-i18n="about">关于</a>
+                <a href="#features" class="nav-link relative py-2 font-medium hover:text-primary transition-colors" data-i18n="features">特点</a>
+                <a href="#get-token" class="nav-link relative py-2 font-medium hover:text-primary transition-colors" data-i18n="get_token">获取代币</a>
+                <a href="#whitepaper" class="nav-link relative py-2 font-medium hover:text-primary transition-colors" data-i18n="whitepaper">白皮书</a>
+                
+                <!-- 语言切换按钮 -->
+                <div class="lang-toggle relative">
+                    <button class="px-3 py-2 rounded-full font-medium bg-white/5 hover:bg-white/10 transition-all flex items-center space-x-2">
+                        <i class="fa fa-globe"></i>
+                        <span id="current-lang">简体中文</span>
+                        <i class="fa fa-chevron-down text-xs"></i>
+                    </button>
+                    
+                    <div class="lang-menu absolute top-full right-0 mt-2 bg-dark/90 border border-white/10 rounded-2xl py-2 w-40 backdrop-blur-lg overflow-hidden">
+                        <button class="lang-item w-full text-left px-4 py-3 flex items-center space-x-3 hover:bg-white/10 active" data-lang="zh">
+                            <span class="flag-icon">🇨🇳</span>
+                            <span>简体中文</span>
+                        </button>
+                        <button class="lang-item w-full text-left px-4 py-3 flex items-center space-x-3 hover:bg-white/10" data-lang="en">
+                            <span class="flag-icon">🇬🇧</span>
+                            <span>English</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <a href="https://bscscan.com/token/0x1c0Ce1bEeca0dB14BcfaC762CEd07e5a99B9c11f" target="_blank" class="bg-gradient-to-r from-primary to-secondary text-white px-6 py-2 rounded-full font-medium hover:shadow-lg hover:shadow-primary/20 transition-all q弹">
+                    <i class="fa fa-wallet mr-2"></i><span data-i18n="contract_address">合约地址</span>
+                </a>
+            </nav>
+            
+            <!-- 移动端菜单按钮 -->
+            <button class="md:hidden text-2xl" id="menu-toggle">
+                <i class="fa fa-bars"></i>
+            </button>
+        </div>
+        
+        <!-- 移动端导航菜单 -->
+        <div class="md:hidden hidden bg-dark/95 blur-bg absolute w-full border-b border-white/10" id="mobile-menu">
+            <div class="container mx-auto px-4 py-4 flex flex-col space-y-4">
+                <a href="#home" class="py-2 font-medium hover:text-primary transition-colors" data-i18n="home">首页</a>
+                <a href="#about" class="py-2 font-medium hover:text-primary transition-colors" data-i18n="about">关于</a>
+                <a href="#features" class="py-2 font-medium hover:text-primary transition-colors" data-i18n="features">特点</a>
+                <a href="#get-token" class="py-2 font-medium hover:text-primary transition-colors" data-i18n="get_token">获取代币</a>
+                <a href="#whitepaper" class="py-2 font-medium hover:text-primary transition-colors" data-i18n="whitepaper">白皮书</a>
+                
+                <!-- 移动端语言切换 -->
+                <div class="pt-2">
+                    <div class="text-sm text-gray-400 mb-2" data-i18n="language">语言/Language:</div>
+                    <div class="flex gap-3">
+                        <button class="lang-item flex-1 text-center px-4 py-2 rounded-full bg-primary/20 active" data-lang="zh">中文</button>
+                        <button class="lang-item flex-1 text-center px-4 py-2 rounded-full bg-white/5 hover:bg-white/10" data-lang="en">English</button>
+                    </div>
+                </div>
+                
+                <a href="https://bscscan.com/token/0x1c0Ce1bEeca0dB14BcfaC762CEd07e5a99B9c11f" target="_blank" class="bg-gradient-to-r from-primary to-secondary text-white px-6 py-3 rounded-full font-medium hover:shadow-lg hover:shadow-primary/20 transition-all text-center">
+                    <i class="fa fa-wallet mr-2"></i><span data-i18n="contract_address">合约地址</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- 首页部分 -->
+        <section id="home" class="min-h-screen pt-24 pb-16 relative z-10">
+            <div class="container mx-auto px-4">
+                <div class="flex flex-col md:flex-row items-center justify-between gap-12">
+                    <div class="md:w-1/2 space-y-6">
+                        <div class="inline-block px-4 py-1 rounded-full bg-primary/10 text-primary font-medium text-sm border border-primary/20" data-i18n="tagline">
+                            币安智能链上的纪念型加密货币
+                        </div>
+                        <h1 class="text-[clamp(2.5rem,5vw,4rem)] font-display font-bold leading-tight text-shadow">
+                            Charlie <span class="bg-gradient-to-r from-primary to-secondary gradient-text">Coin</span>
+                        </h1>
+                        <p class="text-xl text-gray-300 max-w-lg" data-i18n="home_desc">
+                            以Charlie Kuo命名的纪念型加密货币，运行在币安智能链上，承载着特殊的纪念意义。
+                        </p>
+                        <div class="flex flex-wrap gap-4 pt-4">
+                            <a href="#whitepaper" class="bg-gradient-to-r from-primary to-secondary text-white px-8 py-3 rounded-full font-medium hover:shadow-lg hover:shadow-primary/20 transition-all q弹">
+                                <span data-i18n="read_whitepaper">阅读白皮书</span>
+                            </a>
+                            <button class="bg-transparent border border-white/20 text-white px-8 py-3 rounded-full font-medium hover:bg-white/10 transition-all q弹" id="copy-contract">
+                                <i class="fa fa-copy mr-2"></i><span data-i18n="copy_contract">复制合约地址</span>
+                            </button>
+                        </div>
+                        <div class="pt-6">
+                            <div class="text-sm text-gray-400 mb-1" data-i18n="contract_address">合约地址</div>
+                            <div class="bg-white/5 rounded-lg p-3 font-mono text-sm break-all border border-white/10">
+                                0x1c0Ce1bEeca0dB14BcfaC762CEd07e5a99B9c11f
+                            </div>
+                        </div>
+                    </div>
+                    <div class="md:w-1/2 relative">
+                        <div class="w-full max-w-md mx-auto relative">
+                            <div class="absolute inset-0 bg-gradient-to-r from-primary to-secondary rounded-full blur-3xl opacity-30 animate-pulse"></div>
+                            <div class="relative bg-dark/60 border border-white/10 rounded-3xl p-8 backdrop-blur-md q弹">
+                                <div class="flex justify-center mb-6">
+                                    <!-- CC图标 -->
+                                    <div class="w-20 h-20 rounded-full bg-gradient-to-r from-primary to-secondary flex items-center justify-center">
+                                        <img src="https://youke1.picui.cn/s1/2025/08/14/689d991deab41.jpeg" alt="Charlie Coin 标志" class="w-16 h-16 rounded-full">
+                                    </div>
+                                </div>
+                                <h3 class="text-center text-2xl font-bold mb-2">Charlie Coin</h3>
+                                <p class="text-center text-gray-400 mb-6" data-i18n="token_type">BSC 上的纪念型代币</p>
+                                
+                                <div class="space-y-4">
+                                    <div class="bg-white/5 rounded-lg p-4 border border-white/10">
+                                        <div class="text-sm text-gray-400 mb-1" data-i18n="creator">创建者</div>
+                                        <div class="font-medium">Charlie Kuo (郭权锐)</div>
+                                    </div>
+                                    <div class="bg-white/5 rounded-lg p-4 border border-white/10">
+                                        <div class="text-sm text-gray-400 mb-1" data-i18n="blockchain">区块链</div>
+                                        <div class="font-medium">币安智能链 (BSC)</div>
+                                    </div>
+                                    <div class="bg-white/5 rounded-lg p-4 border border-white/10">
+                                        <div class="text-sm text-gray-400 mb-1" data-i18n="type">类型</div>
+                                        <div class="font-medium" data-i18n="memorial_type">纪念型加密货币</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 关于部分 -->
+        <section id="about" class="py-20 relative z-10">
+            <div class="container mx-auto px-4">
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <h2 class="text-[clamp(1.8rem,4vw,3rem)] font-display font-bold mb-6" data-i18n="about_title">关于 Charlie Coin</h2>
+                    <p class="text-gray-300 text-lg" data-i18n="about_desc">Charlie Coin 是一款基于币安智能链的纪念型加密货币，以其创建者 Charlie Kuo (郭权锐) 的名字命名。</p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="bg-dark/60 border border-white/10 rounded-2xl p-8 backdrop-blur-sm q弹">
+                        <div class="w-14 h-14 rounded-xl bg-primary/20 flex items-center justify-center text-primary text-2xl mb-6">
+                            <i class="fa fa-trophy"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-4" data-i18n="memorial_significance">纪念意义</h3>
+                        <p class="text-gray-400" data-i18n="memorial_desc">Charlie Coin 作为纪念型加密货币，承载着特殊的纪念价值，是对创建者 Charlie Kuo 个人历程的独特记录。</p>
+                    </div>
+                    
+                    <div class="bg-dark/60 border border-white/10 rounded-2xl p-8 backdrop-blur-sm q弹">
+                        <div class="w-14 h-14 rounded-xl bg-secondary/20 flex items-center justify-center text-secondary text-2xl mb-6">
+                            <i class="fa fa-link"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-4" data-i18n="bsc_ecosystem">BSC 生态</h3>
+                        <p class="text-gray-400" data-i18n="bsc_desc">基于币安智能链 (BSC) 开发，Charlie Coin 受益于 BSC 生态系统的安全性和高效性，确保交易快速且低成本。</p>
+                    </div>
+                    
+                    <div class="bg-dark/60 border border-white/10 rounded-2xl p-8 backdrop-blur-sm q弹">
+                        <div class="w-14 h-14 rounded-xl bg-accent/20 flex items-center justify-center text-accent text-2xl mb-6">
+                            <i class="fa fa-user"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-4" data-i18n="creator_connection">创建者关联</h3>
+                        <p class="text-gray-400" data-i18n="creator_desc">Charlie Coin 与创建者 Charlie Kuo 紧密关联，代币的设计和理念均反映了创建者的个人特质和愿景。</p>
+                    </div>
+                </div>
+                
+                <div class="mt-20 bg-gradient-to-r from-primary/10 to-secondary/10 rounded-3xl p-8 md:p-12 border border-white/10">
+                    <div class="flex flex-col md:flex-row items-center gap-10">
+                        <div class="md:w-2/5">
+                            <div class="relative">
+                                <div class="absolute inset-0 bg-gradient-to-r from-primary to-secondary rounded-full blur-3xl opacity-30"></div>
+                                <div class="relative w-48 h-48 md:w-64 md:h-64 mx-auto rounded-full overflow-hidden border-4 border-white/10">
+                                    <!-- Charlie Kuo照片 -->
+                                    <img src="https://youke1.picui.cn/s1/2025/08/14/689d9976139f8.jpeg" alt="Charlie Kuo 照片" class="w-full h-full object-cover">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="md:w-3/5 space-y-6">
+                            <h3 class="text-2xl md:text-3xl font-bold" data-i18n="about_creator">关于创建者 Charlie Kuo</h3>
+                            <p class="text-gray-300" data-i18n="creator_desc1">郭权锐 (Charlie Kuo) 是一位对区块链技术充满热情的创新者。Charlie Coin 是他个人旅程中的一个重要里程碑，旨在通过区块链技术创造一份独特的数字纪念。</p>
+                            <p class="text-gray-300" data-i18n="creator_desc2">Charlie 相信加密货币不仅是一种金融工具，更是一种数字时代的表达方式。Charlie Coin 正是这种理念的体现，它不追求经济价值，而是作为一种数字纪念品存在。</p>
+                            <div class="flex gap-4 pt-2">
+                                <a href="https://x.com/PowersharpGuo" target="_blank" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary/20 hover:text-primary transition-colors q弹">
+                                    <i class="fa fa-twitter"></i>
+                                </a>
+                                <a href="https://github.com/Charlie-May9" target="_blank" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary/20 hover:text-primary transition-colors q弹">
+                                    <i class="fa fa-github"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 特点部分 -->
+        <section id="features" class="py-20 relative z-10">
+            <div class="container mx-auto px-4">
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <h2 class="text-[clamp(1.8rem,4vw,3rem)] font-display font-bold mb-6" data-i18n="features_title">Charlie Coin 特点</h2>
+                    <p class="text-gray-300 text-lg" data-i18n="features_desc">了解 Charlie Coin 的核心特性和设计理念</p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                    <div class="space-y-8">
+                        <div class="flex gap-6">
+                            <div class="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center text-primary flex-shrink-0 q弹">
+                                <i class="fa fa-trophy"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold mb-2" data-i18n="feature1_title">纪念性质</h3>
+                                <p class="text-gray-400" data-i18n="feature1_desc">Charlie Coin 主要作为纪念型加密货币存在，承载特殊的个人纪念意义，而非作为投资工具设计。</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex gap-6">
+                            <div class="w-12 h-12 rounded-xl bg-secondary/20 flex items-center justify-center text-secondary flex-shrink-0 q弹">
+                                <i class="fa fa-ban"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold mb-2" data-i18n="feature2_title">非经济价值</h3>
+                                <p class="text-gray-400" data-i18n="feature2_desc">明确不具有经济价值，设计初衷并非用于金融交易或投资目的，仅作为数字纪念品。</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex gap-6">
+                            <div class="w-12 h-12 rounded-xl bg-accent/20 flex items-center justify-center text-accent flex-shrink-0 q弹">
+                                <i class="fa fa-clock-o"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold mb-2" data-i18n="feature3_title">暂不上市</h3>
+                                <p class="text-gray-400" data-i18n="feature3_desc">短期内没有在任何交易所上市的计划，专注于其纪念意义而非市场流通。</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="relative">
+                        <div class="absolute inset-0 bg-gradient-to-r from-primary to-secondary rounded-full blur-3xl opacity-20"></div>
+                        <div class="relative bg-dark/60 border border-white/10 rounded-3xl p-8 backdrop-blur-sm h-full">
+                            <h3 class="text-2xl font-bold mb-6" data-i18n="contract_info">合约信息</h3>
+                            <div class="space-y-6">
+                                <div>
+                                    <div class="text-sm text-gray-400 mb-1" data-i18n="blockchain_platform">区块链平台</div>
+                                    <div class="flex items-center gap-2 font-medium">
+                                        <img src="https://youke1.picui.cn/s1/2025/08/14/689da9c490854.png" alt="BSC 标志" class="w-6 h-6 rounded">
+                                        币安智能链 (BSC)
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <div class="text-sm text-gray-400 mb-1" data-i18n="contract_address">合约地址</div>
+                                    <div class="bg-white/5 rounded-lg p-3 font-mono text-sm break-all border border-white/10">
+                                        0x1c0Ce1bEeca0dB14BcfaC762CEd07e5a99B9c11f
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <div class="text-sm text-gray-400 mb-1" data-i18n="token_symbol">代币符号</div>
+                                    <div class="font-medium">CC</div>
+                                </div>
+                                
+                                <div>
+                                    <div class="text-sm text-gray-400 mb-1" data-i18n="token_name">代币名称</div>
+                                    <div class="font-medium">Charlie Coin</div>
+                                </div>
+                                
+                                <div class="pt-4">
+                                    <a href="https://bscscan.com/token/0x1c0Ce1bEeca0dB14BcfaC762CEd07e5a99B9c11f" target="_blank" class="inline-flex items-center gap-2 text-primary hover:underline font-medium">
+                                        <span data-i18n="view_on_bscscan">在 BscScan 上查看</span>
+                                        <i class="fa fa-external-link"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 获取代币部分 -->
+        <section id="get-token" class="py-20 relative z-10 bg-gradient-to-br from-primary/5 to-secondary/5">
+            <div class="container mx-auto px-4">
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <h2 class="text-[clamp(1.8rem,4vw,3rem)] font-display font-bold mb-6" data-i18n="get_token_title">获取 Charlie Coin</h2>
+                    <p class="text-gray-300 text-lg" data-i18n="get_token_desc">如何获取属于您的 Charlie Coin 纪念代币</p>
+                </div>
+                
+                <div class="max-w-3xl mx-auto bg-dark/60 border border-white/10 rounded-3xl p-8 md:p-12 backdrop-blur-sm">
+                    <div class="flex flex-col md:flex-row gap-8 items-center">
+                        <div class="md:w-1/3">
+                            <div class="w-32 h-32 rounded-2xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center mx-auto q弹">
+                                <!-- CC图标 -->
+                                <img src="https://youke1.picui.cn/s1/2025/08/14/689d991deab41.jpeg" alt="Charlie Coin 标志" class="w-24 h-24 rounded-full">
+                            </div>
+                        </div>
+                        <div class="md:w-2/3 space-y-6">
+                            <h3 class="text-2xl font-bold" data-i18n="how_to_get">获取方式</h3>
+                            <p class="text-gray-300 leading-relaxed" data-i18n="get_token_instructions">
+                                所有用户都可以通过以下方式获取 Charlie Coin 纪念代币：
+                            </p>
+                            <ol class="space-y-4 text-gray-300 leading-relaxed list-decimal pl-5">
+                                <li data-i18n="step1">准备您的 BSC (币安智能链) 钱包地址</li>
+                                <li data-i18n="step2">确定您期望获得的 Charlie Coin 数量</li>
+                                <li data-i18n="step3">发送邮件至 <a href="mailto:gqr20080509@gmail.com" class="text-primary hover:underline">gqr20080509@gmail.com</a></li>
+                                <li data-i18n="step4">邮件中请包含您的 BSC 地址和期望获得的代币数量</li>
+                                <li data-i18n="step5">Charlie Kuo 将处理您的请求并发送代币至您提供的地址</li>
+                            </ol>
+                            <div class="pt-4">
+                                <a href="mailto:gqr20080509@gmail.com" class="inline-block bg-gradient-to-r from-primary to-secondary text-white px-6 py-3 rounded-full font-medium hover:shadow-lg hover:shadow-primary/20 transition-all q弹">
+                                    <i class="fa fa-envelope mr-2"></i><span data-i18n="send_request">发送获取请求</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 白皮书部分 -->
+        <section id="whitepaper" class="py-20 relative z-10 bg-dark/40">
+            <div class="container mx-auto px-4">
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <h2 class="text-[clamp(1.8rem,4vw,3rem)] font-display font-bold mb-6" data-i18n="whitepaper_title">Charlie Coin 白皮书</h2>
+                    <p class="text-gray-300 text-lg" data-i18n="whitepaper_desc">关于 Charlie Coin 的官方说明文档</p>
+                </div>
+                
+                <div class="max-w-4xl mx-auto bg-dark/60 border border-white/10 rounded-3xl p-8 md:p-12 backdrop-blur-sm">
+                    <div class="space-y-8">
+                        <div>
+                            <h3 class="text-2xl font-bold mb-4" data-i18n="section1_title">1. 简介</h3>
+                            <p class="text-gray-300 leading-relaxed" data-i18n="section1_desc">
+                                Charlie Coin (简称 CC) 是一款基于币安智能链 (BSC) 的纪念型加密货币。本代币以其创建者 Charlie Kuo (郭权锐) 的名字命名，旨在创造一份独特的数字纪念品，记录个人历程中的重要时刻。
+                            </p>
+                        </div>
+                        
+                        <div>
+                            <h3 class="text-2xl font-bold mb-4" data-i18n="section2_title">2. 设计理念</h3>
+                            <p class="text-gray-300 leading-relaxed mb-4" data-i18n="section2_desc1">
+                                Charlie Coin 的设计初衷并非作为一种投资工具或金融资产，而是作为一种数字时代的纪念方式。在区块链技术的支持下，Charlie Coin 可以永久记录在分布式账本上，成为一份不可篡改的数字纪念品。
+                            </p>
+                            <p class="text-gray-300 leading-relaxed" data-i18n="section2_desc2">
+                                本代币与创建者 Charlie Kuo 紧密关联，其设计元素和理念均反映了创建者的个人特质和人生旅程中的重要节点。
+                            </p>
+                        </div>
+                        
+                        <div>
+                            <h3 class="text-2xl font-bold mb-4" data-i18n="section3_title">3. 核心特性</h3>
+                            <ul class="space-y-3 text-gray-300 leading-relaxed">
+                                <li class="flex items-start gap-3">
+                                    <i class="fa fa-check-circle text-primary mt-1"></i>
+                                    <span><strong data-i18n="feature1_title">纪念性质</strong> - <span data-i18n="feature1_desc">主要作为数字纪念品存在，具有特殊的个人纪念意义。</span></span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <i class="fa fa-check-circle text-primary mt-1"></i>
+                                    <span><strong data-i18n="feature2_title">非经济价值</strong> - <span data-i18n="feature2_desc">明确不具有经济价值，不应被视为投资工具。</span></span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <i class="fa fa-check-circle text-primary mt-1"></i>
+                                    <span><strong data-i18n="feature3_title">暂不上市</strong> - <span data-i18n="feature3_desc">短期内没有在任何加密货币交易所上市的计划。</span></span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <i class="fa fa-check-circle text-primary mt-1"></i>
+                                    <span><strong data-i18n="feature4_title">BSC 基础</strong> - <span data-i18n="feature4_desc">基于币安智能链 (BSC) 开发，确保交易的安全性和高效性。</span></span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <i class="fa fa-check-circle text-primary mt-1"></i>
+                                    <span><strong data-i18n="feature5_title">创建者关联</strong> - <span data-i18n="feature5_desc">与 Charlie Kuo 个人紧密关联，体现个人历程和故事。</span></span>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div>
+                            <h3 class="text-2xl font-bold mb-4" data-i18n="section4_title">4. 技术细节</h3>
+                            <p class="text-gray-300 leading-relaxed mb-4" data-i18n="section4_desc1">
+                                Charlie Coin 基于币安智能链 (BSC) 开发，采用 BEP-20 代币标准，这是 BSC 生态系统中最常用的代币标准，确保了与各种钱包和应用的兼容性。
+                            </p>
+                            <p class="text-gray-300 leading-relaxed mb-4">
+                                <span data-i18n="contract_address">合约地址</span>: <span class="font-mono bg-white/5 px-2 py-1 rounded">0x1c0Ce1bEeca0dB14BcfaC762CEd07e5a99B9c11f</span>
+                            </p>
+                            <p class="text-gray-300 leading-relaxed" data-i18n="section4_desc2">
+                                该合约已部署在币安智能链主网上，任何人都可以通过 BscScan 等区块浏览器查看合约代码和交易记录。
+                            </p>
+                        </div>
+                        
+                        <div>
+                            <h3 class="text-2xl font-bold mb-4" data-i18n="section5_title">5. 声明</h3>
+                            <p class="text-gray-300 leading-relaxed mb-4" data-i18n="section5_desc1">
+                                Charlie Coin 是一款纪念型加密货币，不具有任何经济价值，不应被视为投资工具或金融资产。本代币的创建目的纯粹是为了纪念和记录，而非用于任何形式的金融交易。
+                            </p>
+                            <p class="text-gray-300 leading-relaxed" data-i18n="section5_desc2">
+                                目前没有，且短期内没有计划将 Charlie Coin 在任何加密货币交易所上市交易。任何声称可以交易 Charlie Coin 的平台均与本项目无关。
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-12 pt-8 border-t border-white/10">
+                        <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                            <div>
+                                <p class="text-gray-400" data-i18n="last_updated">最后更新：2025年8月</p>
+                            </div>
+                            <a href="https://example.com/whitepaper.pdf" target="_blank" class="bg-gradient-to-r from-primary to-secondary text-white px-6 py-3 rounded-full font-medium hover:shadow-lg hover:shadow-primary/20 transition-all q弹 flex items-center gap-2">
+                                <i class="fa fa-download"></i>
+                                <span data-i18n="download_whitepaper">下载白皮书 (PDF)</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="py-12 border-t border-white/10 relative z-10">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+                <div class="md:col-span-2">
+                    <a href="#home" class="flex items-center space-x-2 mb-6">
+                        <!-- CC图标 -->
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-r from-primary to-secondary flex items-center justify-center">
+                            <img src="https://youke1.picui.cn/s1/2025/08/14/689d991deab41.jpeg" alt="Charlie Coin 标志" class="w-8 h-8 rounded-full">
+                        </div>
+                        <span class="text-xl font-display font-bold tracking-tight">Charlie Coin</span>
+                    </a>
+                    <p class="text-gray-400 max-w-md mb-6" data-i18n="footer_desc">
+                        Charlie Coin 是一款基于币安智能链的纪念型加密货币，以其创建者 Charlie Kuo 的名字命名，承载着特殊的纪念意义。
+                    </p>
+                    <div class="flex gap-4">
+                        <a href="https://x.com/PowersharpGuo" target="_blank" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary/20 hover:text-primary transition-colors q弹">
+                            <i class="fa fa-twitter"></i>
+                        </a>
+                        <a href="https://github.com/Charlie-May9" target="_blank" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary/20 hover:text-primary transition-colors q弹">
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-bold mb-6" data-i18n="quick_links">快速链接</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#home" class="text-gray-400 hover:text-primary transition-colors" data-i18n="home">首页</a></li>
+                        <li><a href="#about" class="text-gray-400 hover:text-primary transition-colors" data-i18n="about">关于</a></li>
+                        <li><a href="#features" class="text-gray-400 hover:text-primary transition-colors" data-i18n="features">特点</a></li>
+                        <li><a href="#get-token" class="text-gray-400 hover:text-primary transition-colors" data-i18n="get_token">获取代币</a></li>
+                        <li><a href="#whitepaper" class="text-gray-400 hover:text-primary transition-colors" data-i18n="whitepaper">白皮书</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-bold mb-6" data-i18n="contact_us">联系我们</h4>
+                    <ul class="space-y-3">
+                        <li class="flex items-center gap-2">
+                            <i class="fa fa-envelope text-gray-400"></i>
+                            <a href="mailto:gqr20080509@gmail.com" class="text-gray-400 hover:text-primary transition-colors">gqr20080509@gmail.com</a>
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <i class="fa fa-twitter text-gray-400"></i>
+                            <a href="https://x.com/PowersharpGuo" target="_blank" class="text-gray-400 hover:text-primary transition-colors">@PowersharpGuo</a>
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <i class="fa fa-github text-gray-400"></i>
+                            <a href="https://github.com/Charlie-May9" target="_blank" class="text-gray-400 hover:text-primary transition-colors">Charlie-May9</a>
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <i class="fa fa-link text-gray-400"></i>
+                            <a href="https://bscscan.com/token/0x1c0Ce1bEeca0dB14BcfaC762CEd07e5a99B9c11f" target="_blank" class="text-gray-400 hover:text-primary transition-colors" data-i18n="bsc_contract">BSC 合约</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4">
+                <div class="text-gray-500 text-sm">
+                    &copy; 2025 Charlie Coin. <span data-i18n="all_rights_reserved">保留所有权利。</span>
+                </div>
+                <div class="text-gray-500 text-sm">
+                    <span data-i18n="contract_address">合约地址</span>: 0x1c0Ce1bEeca0dB14BcfaC762CEd07e5a99B9c11f
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 复制成功提示 -->
+    <div id="copy-toast" class="fixed bottom-6 right-6 bg-dark/80 blur-bg border border-white/10 rounded-lg px-6 py-3 text-white transform translate-y-20 opacity-0 transition-all duration-300 flex items-center gap-2 z-50">
+        <i class="fa fa-check-circle text-green-400"></i>
+        <span data-i18n="copied">合约地址已复制</span>
+    </div>
+
+    <script>
+        // 语言包
+        const translations = {
+            zh: {
+                home: "首页",
+                about: "关于",
+                features: "特点",
+                get_token: "获取代币",
+                whitepaper: "白皮书",
+                contract_address: "合约地址",
+                tagline: "币安智能链上的纪念型加密货币",
+                home_desc: "以Charlie Kuo命名的纪念型加密货币，运行在币安智能链上，承载着特殊的纪念意义。",
+                read_whitepaper: "阅读白皮书",
+                copy_contract: "复制合约地址",
+                about_title: "关于 Charlie Coin",
+                about_desc: "Charlie Coin 是一款基于币安智能链的纪念型加密货币，以其创建者 Charlie Kuo (郭权锐) 的名字命名。",
+                memorial_significance: "纪念意义",
+                memorial_desc: "Charlie Coin 作为纪念型加密货币，承载着特殊的纪念价值，是对创建者 Charlie Kuo 个人历程的独特记录。",
+                bsc_ecosystem: "BSC 生态",
+                bsc_desc: "基于币安智能链 (BSC) 开发，Charlie Coin 受益于 BSC 生态系统的安全性和高效性，确保交易快速且低成本。",
+                creator_connection: "创建者关联",
+                creator_desc: "Charlie Coin 与创建者 Charlie Kuo 紧密关联，代币的设计和理念均反映了创建者的个人特质和愿景。",
+                about_creator: "关于创建者 Charlie Kuo",
+                creator_desc1: "郭权锐 (Charlie Kuo) 是一位对区块链技术充满热情的创新者。Charlie Coin 是他个人旅程中的一个重要里程碑，旨在通过区块链技术创造一份独特的数字纪念。",
+                creator_desc2: "Charlie 相信加密货币不仅是一种金融工具，更是一种数字时代的表达方式。Charlie Coin 正是这种理念的体现，它不追求经济价值，而是作为一种数字纪念品存在。",
+                features_title: "Charlie Coin 特点",
+                features_desc: "了解 Charlie Coin 的核心特性和设计理念",
+                feature1_title: "纪念性质",
+                feature1_desc: "Charlie Coin 主要作为纪念型加密货币存在，承载特殊的个人纪念意义，而非作为投资工具设计。",
+                feature2_title: "非经济价值",
+                feature2_desc: "明确不具有经济价值，设计初衷并非用于金融交易或投资目的，仅作为数字纪念品。",
+                feature3_title: "暂不上市",
+                feature3_desc: "短期内没有在任何交易所上市的计划，专注于其纪念意义而非市场流通。",
+                contract_info: "合约信息",
+                blockchain_platform: "区块链平台",
+                token_symbol: "代币符号",
+                token_name: "代币名称",
+                view_on_bscscan: "在 BscScan 上查看",
+                get_token_title: "获取 Charlie Coin",
+                get_token_desc: "如何获取属于您的 Charlie Coin 纪念代币",
+                how_to_get: "获取方式",
+                get_token_instructions: "所有用户都可以通过以下方式获取 Charlie Coin 纪念代币：",
+                step1: "准备您的 BSC (币安智能链) 钱包地址",
+                step2: "确定您期望获得的 Charlie Coin 数量",
+                step3: "发送邮件至",
+                step4: "邮件中请包含您的 BSC 地址和期望获得的代币数量",
+                step5: "Charlie Kuo 将处理您的请求并发送代币至您提供的地址",
+                send_request: "发送获取请求",
+                whitepaper_title: "Charlie Coin 白皮书",
+                whitepaper_desc: "关于 Charlie Coin 的官方说明文档",
+                section1_title: "1. 简介",
+                section1_desc: "Charlie Coin (简称 CC) 是一款基于币安智能链 (BSC) 的纪念型加密货币。本代币以其创建者 Charlie Kuo (郭权锐) 的名字命名，旨在创造一份独特的数字纪念品，记录个人历程中的重要时刻。",
+                section2_title: "2. 设计理念",
+                section2_desc1: "Charlie Coin 的设计初衷并非作为一种投资工具或金融资产，而是作为一种数字时代的纪念方式。在区块链技术的支持下，Charlie Coin 可以永久记录在分布式账本上，成为一份不可篡改的数字纪念品。",
+                section2_desc2: "本代币与创建者 Charlie Kuo 紧密关联，其设计元素和理念均反映了创建者的个人特质和人生旅程中的重要节点。",
+                section3_title: "3. 核心特性",
+                feature4_title: "BSC 基础",
+                feature4_desc: "基于币安智能链 (BSC) 开发，确保交易的安全性和高效性。",
+                feature5_title: "创建者关联",
+                feature5_desc: "与 Charlie Kuo 个人紧密关联，体现个人历程和故事。",
+                section4_title: "4. 技术细节",
+                section4_desc1: "Charlie Coin 基于币安智能链 (BSC) 开发，采用 BEP-20 代币标准，这是 BSC 生态系统中最常用的代币标准，确保了与各种钱包和应用的兼容性。",
+                section4_desc2: "该合约已部署在币安智能链主网上，任何人都可以通过 BscScan 等区块浏览器查看合约代码和交易记录。",
+                section5_title: "5. 声明",
+                section5_desc1: "Charlie Coin 是一款纪念型加密货币，不具有任何经济价值，不应被视为投资工具或金融资产。本代币的创建目的纯粹是为了纪念和记录，而非用于任何形式的金融交易。",
+                section5_desc2: "目前没有，且短期内没有计划将 Charlie Coin 在任何加密货币交易所上市交易。任何声称可以交易 Charlie Coin 的平台均与本项目无关。",
+                last_updated: "最后更新：2025年8月",
+                download_whitepaper: "下载白皮书 (PDF)",
+                footer_desc: "Charlie Coin 是一款基于币安智能链的纪念型加密货币，以其创建者 Charlie Kuo 的名字命名，承载着特殊的纪念意义。",
+                quick_links: "快速链接",
+                contact_us: "联系我们",
+                bsc_contract: "BSC 合约",
+                all_rights_reserved: "保留所有权利。",
+                copied: "合约地址已复制",
+                language: "语言/Language:",
+                creator: "创建者",
+                blockchain: "区块链",
+                type: "类型",
+                memorial_type: "纪念型加密货币",
+                token_type: "BSC 上的纪念型代币"
+            },
+            en: {
+                home: "Home",
+                about: "About",
+                features: "Features",
+                get_token: "Get Token",
+                whitepaper: "Whitepaper",
+                contract_address: "Contract Address",
+                tagline: "Commemorative Cryptocurrency on Binance Smart Chain",
+                home_desc: "A commemorative cryptocurrency named after Charlie Kuo, running on Binance Smart Chain, carrying special commemorative significance.",
+                read_whitepaper: "Read Whitepaper",
+                copy_contract: "Copy Contract Address",
+                about_title: "About Charlie Coin",
+                about_desc: "Charlie Coin is a commemorative cryptocurrency based on Binance Smart Chain, named after its creator Charlie Kuo (Guo Quanrui).",
+                memorial_significance: "Commemorative Significance",
+                memorial_desc: "As a commemorative cryptocurrency, Charlie Coin carries special commemorative value, serving as a unique record of creator Charlie Kuo's personal journey.",
+                bsc_ecosystem: "BSC Ecosystem",
+                bsc_desc: "Built on Binance Smart Chain (BSC), Charlie Coin benefits from the security and efficiency of the BSC ecosystem, ensuring fast and low-cost transactions.",
+                creator_connection: "Creator Connection",
+                creator_desc: "Charlie Coin is closely associated with creator Charlie Kuo, with its design and philosophy reflecting the creator's personal traits and vision.",
+                about_creator: "About Creator Charlie Kuo",
+                creator_desc1: "Guo Quanrui (Charlie Kuo) is an innovator passionate about blockchain technology. Charlie Coin represents an important milestone in his personal journey, aiming to create a unique digital memorial through blockchain technology.",
+                creator_desc2: "Charlie believes that cryptocurrency is not just a financial tool but also a form of expression in the digital age. Charlie Coin embodies this philosophy, pursuing not economic value but existing as a digital keepsake.",
+                features_title: "Charlie Coin Features",
+                features_desc: "Learn about the core features and design philosophy of Charlie Coin",
+                feature1_title: "Commemorative Nature",
+                feature1_desc: "Charlie Coin primarily exists as a commemorative cryptocurrency, carrying special personal significance rather than being designed as an investment tool.",
+                feature2_title: "Non-Economic Value",
+                feature2_desc: "Explicitly has no economic value and is not intended for financial transactions or investment purposes, serving solely as a digital keepsake.",
+                feature3_title: "Not Listed",
+                feature3_desc: "No plans to list on any exchanges in the short term, focusing on its commemorative significance rather than market circulation.",
+                contract_info: "Contract Information",
+                blockchain_platform: "Blockchain Platform",
+                token_symbol: "Token Symbol",
+                token_name: "Token Name",
+                view_on_bscscan: "View on BscScan",
+                get_token_title: "Get Charlie Coin",
+                get_token_desc: "How to get your Charlie Coin commemorative token",
+                how_to_get: "How to Get",
+                get_token_instructions: "All users can obtain Charlie Coin commemorative tokens through the following method:",
+                step1: "Prepare your BSC (Binance Smart Chain) wallet address",
+                step2: "Determine the amount of Charlie Coin you wish to receive",
+                step3: "Send an email to",
+                step4: "Include your BSC address and desired token amount in the email",
+                step5: "Charlie Kuo will process your request and send tokens to the provided address",
+                send_request: "Send Request",
+                whitepaper_title: "Charlie Coin Whitepaper",
+                whitepaper_desc: "Official documentation about Charlie Coin",
+                section1_title: "1. Introduction",
+                section1_desc: "Charlie Coin (abbreviated as CC) is a commemorative cryptocurrency based on Binance Smart Chain (BSC). Named after its creator Charlie Kuo (Guo Quanrui), this token aims to create a unique digital keepsake that records important moments in personal history.",
+                section2_title: "2. Design Philosophy",
+                section2_desc1: "Charlie Coin was not designed as an investment tool or financial asset, but as a form of commemoration in the digital age. With blockchain technology, Charlie Coin can be permanently recorded on a distributed ledger, becoming an immutable digital memorial.",
+                section2_desc2: "This token is closely associated with creator Charlie Kuo, with its design elements and philosophy reflecting the creator's personal traits and important milestones in life.",
+                section3_title: "3. Core Features",
+                feature4_title: "BSC Foundation",
+                feature4_desc: "Developed on Binance Smart Chain (BSC), ensuring transaction security and efficiency.",
+                feature5_title: "Creator Association",
+                feature5_desc: "Closely associated with Charlie Kuo personally, reflecting personal journey and story.",
+                section4_title: "4. Technical Details",
+                section4_desc1: "Charlie Coin is developed on Binance Smart Chain (BSC) using the BEP-20 token standard, the most commonly used token standard in the BSC ecosystem, ensuring compatibility with various wallets and applications.",
+                section4_desc2: "The contract has been deployed on the Binance Smart Chain mainnet, and anyone can view the contract code and transaction records through blockchain explorers like BscScan.",
+                section5_title: "5. Statement",
+                section5_desc1: "Charlie Coin is a commemorative cryptocurrency with no economic value and should not be considered an investment tool or financial asset. The creation purpose of this token is purely for commemoration and recording, not for any form of financial transaction.",
+                section5_desc2: "There are currently no plans, and there will be no plans in the near future, to list Charlie Coin on any cryptocurrency exchange. Any platform claiming to trade Charlie Coin is unrelated to this project.",
+                last_updated: "Last Updated: August 2025",
+                download_whitepaper: "Download Whitepaper (PDF)",
+                footer_desc: "Charlie Coin is a commemorative cryptocurrency based on Binance Smart Chain, named after its creator Charlie Kuo, carrying special commemorative significance.",
+                quick_links: "Quick Links",
+                contact_us: "Contact Us",
+                bsc_contract: "BSC Contract",
+                all_rights_reserved: "All Rights Reserved.",
+                copied: "Contract address copied",
+                language: "Language/语言:",
+                creator: "Creator",
+                blockchain: "Blockchain",
+                type: "Type",
+                memorial_type: "Commemorative Cryptocurrency",
+                token_type: "Commemorative Token on BSC"
+            }
+        };
+
+        // 当前语言
+        let currentLang = 'en';
+
+        // 切换语言函数
+        function setLanguage(lang) {
+            currentLang = lang;
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang][key]) {
+                    if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+                        el.value = translations[lang][key];
+                    } else {
+                        el.textContent = translations[lang][key];
+                    }
+                }
+            });
+            
+            // 更新当前语言显示
+            document.getElementById('current-lang').textContent = 
+                lang === 'zh' ? '简体中文' : 'English';
+            
+            // 更新语言按钮激活状态
+            document.querySelectorAll('.lang-item').forEach(item => {
+                item.classList.remove('active');
+                if (item.getAttribute('data-lang') === lang) {
+                    item.classList.add('active');
+                }
+            });
+            
+            // 保存语言选择
+            localStorage.setItem('language', lang);
+        }
+
+        // 导航栏滚动效果
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('py-2', 'shadow-lg', 'shadow-black/20');
+                navbar.classList.remove('py-4');
+            } else {
+                navbar.classList.add('py-4');
+                navbar.classList.remove('py-2', 'shadow-lg', 'shadow-black/20');
+            }
+        });
+        
+        // 移动端菜单切换
+        const menuToggle = document.getElementById('menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        menuToggle.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+            const icon = menuToggle.querySelector('i');
+            if (icon.classList.contains('fa-bars')) {
+                icon.classList.replace('fa-bars', 'fa-times');
+            } else {
+                icon.classList.replace('fa-times', 'fa-bars');
+            }
+        });
+        
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                // 关闭移动菜单（如果打开）
+                if (!mobileMenu.classList.contains('hidden')) {
+                    mobileMenu.classList.add('hidden');
+                    const icon = menuToggle.querySelector('i');
+                    icon.classList.replace('fa-times', 'fa-bars');
+                }
+                
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // 复制合约地址功能
+        const copyButton = document.getElementById('copy-contract');
+        const toast = document.getElementById('copy-toast');
+        const contractAddress = '0x1c0Ce1bEeca0dB14BcfaC762CEd07e5a99B9c11f';
+        
+        copyButton.addEventListener('click', () => {
+            navigator.clipboard.writeText(contractAddress).then(() => {
+                // 显示提示
+                toast.classList.remove('translate-y-20', 'opacity-0');
+                toast.classList.add('translate-y-0', 'opacity-100');
+                
+                // 3秒后隐藏提示
+                setTimeout(() => {
+                    toast.classList.add('translate-y-20', 'opacity-0');
+                    toast.classList.remove('translate-y-0', 'opacity-100');
+                }, 3000);
+            });
+        });
+        
+        // 语言切换事件
+        document.querySelectorAll('[data-lang]').forEach(button => {
+            button.addEventListener('click', () => {
+                const lang = button.getAttribute('data-lang');
+                setLanguage(lang);
+            });
+        });
+        
+        // 初始化页面
+        window.addEventListener('DOMContentLoaded', () => {
+            // 从localStorage获取保存的语言设置
+            const savedLang = localStorage.getItem('language');
+            if (savedLang) {
+                setLanguage(savedLang);
+            } else {
+                setLanguage('zh');
+            }
+        });
+    </script>
+</body>
+</html>
